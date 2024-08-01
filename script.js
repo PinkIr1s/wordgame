@@ -6,6 +6,18 @@ let hashTable = hashDictionary(validWords);
 let shownCharLimit = false;
 let guesses = 0;
 
+
+
+const { Random, MersenneTwister19937 } = window.Random;
+const engine = MersenneTwister19937.seed(Math.floor(Date.now() / (86400000))); // Seed: Days since Jan 1st 1970.
+const random = new Random(engine);
+
+// // Generate a random integer between 1 and 100
+// const randomInt = random.integer(1, 100);
+// console.log('Random Integer:', randomInt);
+
+
+
 const inputElement = document.querySelector("#input > input");
 
 function start() {
@@ -78,7 +90,7 @@ function checkGuess(guess) {
         }
     }
 }
-
+    
 function addGuess(str) {
     guesses++;
     const wrapper = document.createElement("div");
@@ -135,7 +147,7 @@ document.addEventListener("click", (event) => {
 });
 
 function getNewPuzzle(depth) {
-    const startingIndex = Math.floor(Math.random() * validWords.length);
+    const startingIndex = random.integer(0, validWords.length);
     const starterWord = validWords[startingIndex].toUpperCase();
     let currentWord = starterWord;
     let usedIndices = [startingIndex];
@@ -156,7 +168,7 @@ function getNewPuzzle(depth) {
         console.log(`Iteration ${i}: currentWord = ${currentWord}, possibleVariants = ${possibleVariants.map(idx => validWords[idx])}`);
         
         if (possibleVariants.length > 0) {
-            let newIndex = possibleVariants[Math.floor(Math.random() * possibleVariants.length)];
+            let newIndex = possibleVariants[random.integer(0, possibleVariants.length)];
             usedIndices.push(newIndex);
             currentWord = validWords[newIndex].toUpperCase(); // Update to uppercase
             wordPath.push(currentWord);
@@ -172,3 +184,4 @@ function getNewPuzzle(depth) {
     
     return wordPath;
 }
+
