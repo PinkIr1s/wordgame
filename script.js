@@ -34,13 +34,17 @@ function reroll() {
     target = wordPath[wordPath.length - 1];
 
     const mainElement = document.getElementById("main");
-    mainElement.removeChild(mainElement.firstElementChild);
+    // mainElement.removeChild(mainElement.firstElementChild);
 
     // const mainElement = document.getElementById("main");
     const guessElements = mainElement.children;
-    for (let i = 0; i < guessElements.length; i++) {
-        if (!guessElements[i].classList.contains("given") && guessElements[i].classList.contains("guess"))
+    let iterations = guessElements.length;
+    for (let i = 0; i < iterations; i++) {
+        if (guessElements[i].classList.contains("guess")) {
             mainElement.removeChild(guessElements[i]);
+            i--;
+            iterations--;
+        }
     }
 
     givenGuess(initialWord);
