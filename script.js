@@ -47,6 +47,8 @@ function reroll() {
         }
     }
 
+    guesses = 0;
+
     givenGuess(initialWord);
     lastGuess = initialWord;
     instantiateTarget(target);
