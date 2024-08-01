@@ -12,10 +12,6 @@ const { Random, MersenneTwister19937 } = window.Random;
 const engine = MersenneTwister19937.seed(Math.floor(Date.now() / (86400000))); // Seed: Days since Jan 1st 1970.
 const random = new Random(engine);
 
-// // Generate a random integer between 1 and 100
-// const randomInt = random.integer(1, 100);
-// console.log('Random Integer:', randomInt);
-
 
 
 const inputElement = document.querySelector("#input > input");
@@ -23,10 +19,22 @@ const inputElement = document.querySelector("#input > input");
 function start() {
     inputElement.focus();
 
-    const wordPath = getNewPuzzle(5); // new puzzle of depth (steps) 4.
+    const wordPath = getNewPuzzle(5, true); // new puzzle of depth (steps) 4.
     initialWord = wordPath[0];
     target = wordPath[wordPath.length - 1];
 
+    givenGuess(initialWord);
+    lastGuess = initialWord;
+    instantiateTarget(target);
+}
+
+function reroll() {
+    const wordPath = getNewPuzzle(5, false);
+    initialWord = wordPath[0];
+    target = wordPath[wordPath.length - 1];
+
+    const mainElement = document.getElementById("main");
+    mainElement.removeChild(mainElement.firstElementChild);
     givenGuess(initialWord);
     lastGuess = initialWord;
     instantiateTarget(target);
@@ -146,8 +154,8 @@ document.addEventListener("click", (event) => {
     inputElement.focus();
 });
 
-function getNewPuzzle(depth) {
-    const startingIndex = random.integer(0, validWords.length);
+function getNewPuzzle(depth, isDaily) {
+    const startingIndex = isDaily ? random.integer(0, validWords.length) : Math.floor(Math.random() * validWords.length);
     const starterWord = validWords[startingIndex].toUpperCase();
     let currentWord = starterWord;
     let usedIndices = [startingIndex];
@@ -165,22 +173,22 @@ function getNewPuzzle(depth) {
         }
 
         // Debugging output
-        console.log(`Iteration ${i}: currentWord = ${currentWord}, possibleVariants = ${possibleVariants.map(idx => validWords[idx])}`);
+        // console.log(`Iteration ${i}: currentWord = ${currentWord}, possibleVariants = ${possibleVariants.map(idx => validWords[idx])}`);
         
         if (possibleVariants.length > 0) {
-            let newIndex = possibleVariants[random.integer(0, possibleVariants.length)];
+            let newIndex = isDaily ? possibleVariants[random.integer(0, possibleVariants.length)] : possibleVariants[Math.floor(Math.random() * possibleVariants.length)];
             usedIndices.push(newIndex);
             currentWord = validWords[newIndex].toUpperCase(); // Update to uppercase
             wordPath.push(currentWord);
         } else {
             // No valid variants found, break the loop
-            console.log(`No more valid variants found at iteration ${i}`);
+            // console.log(`No more valid variants found at iteration ${i}`);
             break;
         }
     }
     
     // Debugging output
-    console.log(`Final wordPath: ${wordPath}`);
+    // console.log(`Final wordPath: ${wordPath}`);
     
     return wordPath;
 }
