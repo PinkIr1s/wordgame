@@ -35,6 +35,14 @@ function reroll() {
 
     const mainElement = document.getElementById("main");
     mainElement.removeChild(mainElement.firstElementChild);
+
+    // const mainElement = document.getElementById("main");
+    const guessElements = mainElement.children;
+    for (let i = 0; i < guessElements.length; i++) {
+        if (!guessElements[i].classList.contains("given") && guessElements[i].classList.contains("guess"))
+            mainElement.removeChild(guessElements[i]);
+    }
+
     givenGuess(initialWord);
     lastGuess = initialWord;
     instantiateTarget(target);
