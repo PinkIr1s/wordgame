@@ -169,7 +169,7 @@ document.addEventListener("click", (event) => {
 });
 
 function getNewPuzzle(depth, isDaily) {
-    const startingIndex = isDaily ? random.integer(0, validWords.length) : Math.floor(Math.random() * validWords.length);
+    const startingIndex = isDaily ? random.integer(0, validWords.length - 1) : Math.floor(Math.random() * validWords.length);
     const starterWord = validWords[startingIndex].toUpperCase();
     let currentWord = starterWord;
     let usedIndices = [startingIndex];
@@ -190,7 +190,7 @@ function getNewPuzzle(depth, isDaily) {
         // console.log(`Iteration ${i}: currentWord = ${currentWord}, possibleVariants = ${possibleVariants.map(idx => validWords[idx])}`);
         
         if (possibleVariants.length > 0) {
-            let newIndex = isDaily ? possibleVariants[random.integer(0, possibleVariants.length)] : possibleVariants[Math.floor(Math.random() * possibleVariants.length)];
+            let newIndex = isDaily ? possibleVariants[random.integer(0, possibleVariants.length - 1)] : possibleVariants[Math.floor(Math.random() * possibleVariants.length)];
             usedIndices.push(newIndex);
             currentWord = validWords[newIndex].toUpperCase(); // Update to uppercase
             wordPath.push(currentWord);
